@@ -133,6 +133,7 @@ def init_db_command():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run()
     with app.app_context():
         init_db()
+    app.run()
+
