@@ -1,6 +1,6 @@
-from domain.data import Team, Player, UserData, UserLogin
+from domain.data import Team, Player, UserData, UserLogin, User
 from common.player_types import PlayerType
-from common.utils import player_age_generator, currency_formatter, format_url
+from common.utils import player_age_generator, currency_formatter, format_url, generate_team_name
 from config import app_config
 from repositories import user_repository
 
@@ -13,26 +13,25 @@ def check_if_user_exists(username):
 def get_user_by_username(username):
     """find user by username"""
     user = user_repository.get_user_by_username(username)
-    user_data = UserData(
+    user_data = _user_model_to_user_data(user)
+    return user_data
+
+
+def _user_model_to_user_data(user):
+    return UserData(
         user_id=user.id,
         username=user.username,
-        first_name=user.first_name,
-        last_name=user.last_name,
         password=user.password
     )
-    return user_data
 
 
 def get_user_data_by_username(username):
     """find user by username"""
     user = user_repository.get_user_by_username(username)
-    user_data = UserData(
+    user_data = User(
         user_id=user.id,
         username=user.username,
-        first_name=user.first_name,
-        last_name=user.last_name
     )
-
     team = user.team
     players = [_player_model_to_player_data(player) for player in team.players]
     team_data = Team(
@@ -65,15 +64,13 @@ def _player_model_to_player_data(player):
     return player_data
 
 
-def create_user(username, password, first_name=None, last_name=None):
+def create_user(username, password):
     """Creates/registers a new user"""
 
-    team = _create_team(f'team_{first_name}_{last_name}')
+    team = _create_team(f'team_{generate_team_name()}')
     team.players = _create_players()
 
     user_data = UserData(username=username,
-                         first_name=first_name,
-                         last_name=last_name,
                          password=password,
                          team=team)
 

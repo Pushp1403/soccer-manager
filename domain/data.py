@@ -28,13 +28,15 @@ class Team:
 
 
 @dataclass
-class UserData:
+class User:
     user_id: int = None
     username: str = ""
-    first_name: str = ""
-    last_name: str = ""
-    password: str = ""
     team: Team = None
+
+
+@dataclass
+class UserData(User):
+    password: str = ""
 
 
 @dataclass

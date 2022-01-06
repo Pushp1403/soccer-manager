@@ -26,9 +26,7 @@ def register_user(user_data: UserData):
     with db.session.begin():
         user = User(
             username=user_data.username,
-            password=user_data.password,
-            first_name=user_data.first_name,
-            last_name=user_data.last_name
+            password=user_data.password
         )
 
         team = Team(

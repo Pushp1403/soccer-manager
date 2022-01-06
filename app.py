@@ -53,13 +53,13 @@ def handle_exception(e):
 
 @app.errorhandler(ApplicationException)
 def handle_exception(e):
-    """Return JSON instead of HTML for HTTP errors."""
+    """Return JSON for ApplicationExceptions"""
     return format_error(e)
 
 
 @app.errorhandler(Exception)
 def handle_exception(e):
-    """Return JSON instead of HTML for HTTP errors."""
+    """Return JSON for all Exceptions"""
     return format_generic_error(e)
 
 

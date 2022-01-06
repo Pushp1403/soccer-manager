@@ -7,8 +7,6 @@ from werkzeug.security import generate_password_hash
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
-    first_name = db.Column(db.String, unique=False, nullable=False)
-    last_name = db.Column(db.String, unique=False, nullable=False)
     _password = db.Column("password", db.String, nullable=False)
     team = db.relationship('Team', backref='User', lazy=True, uselist=False)
 

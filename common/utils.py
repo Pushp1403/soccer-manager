@@ -1,12 +1,25 @@
 import datetime
-import random
 import locale
+import random
+import string
+
 from flask import request
 
 
 def format_url(uri):
     """returns the full url"""
     return f'{request.root_url}{uri}'
+
+
+def generate_team_name():
+    """
+    Generates a random string
+    :return: str
+    """
+    return ''.join(
+        random.choices(string.ascii_uppercase +
+                       string.digits, k=7)
+    )
 
 
 def adjust_market_value(ask_price):
@@ -82,6 +95,7 @@ def format_response(data, code):
     :param code: response code
     :return: JSON
     """
+
     data = {
         "success": True,
         "timestamp": datetime.datetime.utcnow(),

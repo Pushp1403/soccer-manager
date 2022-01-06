@@ -6,14 +6,10 @@ from auth import jwt_required, get_jwt_identity
 
 request_parser = reqparse.RequestParser()
 request_parser.add_argument("username", help="username is a mandatory field.", required=True)
-request_parser.add_argument("first_name")
-request_parser.add_argument("last_name")
 request_parser.add_argument("password", help="Password is a mandatory field", required=True)
 
 resource_fields = {
-    "username": fields.String,
-    "first_name": fields.String,
-    "last_name": fields.String
+    "username": fields.String
 }
 
 
@@ -28,7 +24,7 @@ class User(Resource):
         args = request_parser.parse_args()
         if user_service.check_if_user_exists(args.username):
             raise UserAlreadyExistsException(payload=args)
-        return user_service.create_user(args.username, args.password, args.first_name, args.last_name)
+        return user_service.create_user(args.username, args.password)
 
     @jwt_required
     def get(self):
