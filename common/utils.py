@@ -1,3 +1,4 @@
+import re
 import datetime
 import locale
 import random
@@ -5,7 +6,7 @@ import string
 import pycountry
 
 from flask import request
-from config.errors import InvalidCountryNameException
+from config.errors import InputValidationError
 
 
 def validate_country_name(country_name):
@@ -17,7 +18,8 @@ def validate_country_name(country_name):
     try:
         pycountry.countries.lookup(country_name)
     except LookupError as e:
-        raise InvalidCountryNameException(payload={'country': country_name})
+        raise InputValidationError(message="Invalid country name specified",
+                                   payload={'country': country_name})
 
 
 def format_url(uri):
@@ -119,3 +121,15 @@ def format_response(data, code):
     }
 
     return data
+
+
+def is_valid_email(email_id):
+    """
+    Validate if the provided email is a valid email
+    :param email_id: email ID
+    :return: boolean
+    """
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    if not re.fullmatch(regex, email_id):
+        raise InputValidationError(message="Invalid email ID",
+                                   payload={"username": email_id})

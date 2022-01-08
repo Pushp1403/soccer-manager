@@ -1,5 +1,6 @@
 from flask_restful import Resource, reqparse
 from werkzeug.security import check_password_hash
+from common.utils import is_valid_email
 
 from auth import (
     create_jwt,
@@ -34,6 +35,8 @@ class UserLogin(Resource):
     def post(self):
         """User login/Authentication"""
         args = login_request_parser.parse_args()
+        is_valid_email(args.username)
+
         if not user_service.check_if_user_exists(args.username):
             raise UserNotFoundException(payload=args)
 

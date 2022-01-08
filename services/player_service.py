@@ -11,10 +11,11 @@ def get_players_by_team(team_id):
     :return: List[Player]
     """
     players = player_repository.get_players_for_team(team_id)
-    return [_player_model_to_player_data(player) for player in players]
+    return [player_model_to_player_data(player) for player in players]
 
 
-def _player_model_to_player_data(player):
+def player_model_to_player_data(player):
+    """player model to player domain objects"""
     player_data = Player(
         player_id=player.id,
         first_name=player.first_name,
@@ -39,4 +40,4 @@ def update_player_details(player_id, first_name=None, last_name=None, country=No
     :return: updated player object
     """
     player = player_repository.update_player_details(player_id, first_name, last_name, country)
-    return _player_model_to_player_data(player)
+    return player_model_to_player_data(player)

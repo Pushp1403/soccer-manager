@@ -83,13 +83,13 @@ class InsufficientFundsException(ApplicationException):
                          name="InsufficientFundsException")
 
 
-class InvalidCountryNameException(ApplicationException):
+class InputValidationError(ApplicationException):
     """
     Thrown if ask price is more than available cash
     """
 
-    def __init__(self, payload=None):
-        super().__init__(message="Invalid country name specified",
+    def __init__(self, message=None, payload=None):
+        super().__init__(message=message,
                          status_code=422,
-                         name="InvalidCountryNameException",
+                         name="InputValidationError",
                          payload=payload)

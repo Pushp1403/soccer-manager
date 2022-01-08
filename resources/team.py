@@ -8,20 +8,10 @@ team_patch_parser = reqparse.RequestParser()
 team_patch_parser.add_argument("team_name", help="Team name")
 team_patch_parser.add_argument("country", help="Team Country")
 
-team_fields = {
-    "team_id": fields.Integer,
-    "team_name": fields.String,
-    "available_cash": fields.String,
-    "country": fields.String,
-    "account_id": fields.Integer,
-    "team_value": fields.String
-}
-
 
 class Team(Resource):
 
     @jwt_required
-    @marshal_with(team_fields)
     def get(self):
         """
         Returns the team
@@ -31,7 +21,6 @@ class Team(Resource):
         return user_data.team
 
     @jwt_required
-    @marshal_with(team_fields)
     def patch(self):
         """
         Update an existing team details.

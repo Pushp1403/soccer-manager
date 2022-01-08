@@ -1,7 +1,7 @@
 from repositories import team_repository
 from domain.data import Team
 from common.utils import currency_formatter
-from services import user_service
+from services import user_service, player_service
 from auth import get_jwt_identity
 
 
@@ -39,7 +39,7 @@ def update_team_details(team_name=None, country=None):
 
 
 def _team_model_to_team_data(team):
-    return Team(
+    team_data = Team(
         team_id=team.id,
         team_name=team.team_name,
         available_cash=currency_formatter(team.available_cash),
@@ -47,3 +47,6 @@ def _team_model_to_team_data(team):
         account_id=team.team_owner,
         team_value=currency_formatter(sum(player.market_value for player in team.players))
     )
+
+    team_data.players = [player_service.player_model_to_player_data(player) for player in team.players]
+    return team_data

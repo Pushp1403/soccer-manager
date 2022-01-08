@@ -2,7 +2,7 @@ from flask_restful import Resource, reqparse, fields, marshal_with
 from services import user_service
 from config.errors import UserAlreadyExistsException
 from auth import jwt_required, get_jwt_identity
-
+from common.utils import is_valid_email
 
 request_parser = reqparse.RequestParser()
 request_parser.add_argument("username", help="username is a mandatory field.", required=True)
@@ -22,6 +22,7 @@ class User(Resource):
         :return:
         """
         args = request_parser.parse_args()
+        is_valid_email(args.username)
         if user_service.check_if_user_exists(args.username):
             raise UserAlreadyExistsException(payload=args)
         return user_service.create_user(args.username, args.password)
