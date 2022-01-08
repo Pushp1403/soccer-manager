@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse
 from services import user_service, player_service
 from auth import get_jwt_identity, jwt_required
 from config.errors import InvalidPlayerIdException
+from common.utils import validate_country_name
 
 patch_request_parser = reqparse.RequestParser()
 patch_request_parser.add_argument("first_name")
@@ -37,8 +38,9 @@ class Player(Resource):
         :param player_id:  player id
         :return: updated player object
         """
-        _find_player(player_id)
         args = patch_request_parser.parse_args()
+        validate_country_name(args.country)
+        _find_player(player_id)
         player = player_service.update_player_details(
             player_id,
             first_name=args.first_name,

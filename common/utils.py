@@ -2,8 +2,22 @@ import datetime
 import locale
 import random
 import string
+import pycountry
 
 from flask import request
+from config.errors import InvalidCountryNameException
+
+
+def validate_country_name(country_name):
+    """
+    Validates the given country name using pycountry lib
+    :param country_name: given country name
+    :return: None if validation passes
+    """
+    try:
+        pycountry.countries.lookup(country_name)
+    except LookupError as e:
+        raise InvalidCountryNameException(payload={'country': country_name})
 
 
 def format_url(uri):

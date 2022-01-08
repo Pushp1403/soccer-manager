@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse, fields, marshal_with
 from services import team_service, user_service
 from auth import jwt_required, get_jwt_identity
+from common.utils import validate_country_name
 
 
 team_patch_parser = reqparse.RequestParser()
@@ -39,5 +40,6 @@ class Team(Resource):
         :return: updated team object
         """
         args = team_patch_parser.parse_args()
+        validate_country_name(args.country)
         return team_service.update_team_details(team_name=args.team_name,
                                                 country=args.country)

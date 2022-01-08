@@ -81,3 +81,15 @@ class InsufficientFundsException(ApplicationException):
         super().__init__(message="Insufficient funds",
                          status_code=400,
                          name="InsufficientFundsException")
+
+
+class InvalidCountryNameException(ApplicationException):
+    """
+    Thrown if ask price is more than available cash
+    """
+
+    def __init__(self, payload=None):
+        super().__init__(message="Invalid country name specified",
+                         status_code=422,
+                         name="InvalidCountryNameException",
+                         payload=payload)
