@@ -4,6 +4,7 @@ from domain.data import Transfer
 from model.models import Transfer as TransferModel
 from common.utils import currency_formatter, format_url
 from config import app_config
+from config.errors import InvalidTransferException
 from auth import get_jwt_identity
 
 
@@ -14,8 +15,9 @@ def confirm_transfer(transfer_id, user_data):
     :param user_data: user data
     :return: completed transfer object
     """
+    transfer = _validate_transfer_request(transfer_id)
     transfer_repository.confirm_transfer(transfer_id, user_data)
-    return _transfer_model_to_data(transfer_repository.get_transfer_by_id(transfer_id))
+    return _transfer_model_to_data(transfer)
 
 
 def get_transfer_by_transfer_id(transfer_id):
@@ -24,7 +26,17 @@ def get_transfer_by_transfer_id(transfer_id):
     :param transfer_id: transfer ID
     :return:
     """
-    return _transfer_model_to_data(transfer_repository.get_transfer_by_id(transfer_id))
+    transfer = _validate_transfer_request(transfer_id)
+    return _transfer_model_to_data(transfer)
+
+
+def _validate_transfer_request(transfer_id):
+    transfer = transfer_repository.get_transfer_by_id(transfer_id)
+    if not transfer:
+        raise InvalidTransferException(message="Invalid transfer request",
+                                       payload={"transfer_id": transfer_id},
+                                       status_code=404)
+    return transfer
 
 
 def get_all_active_transfers():

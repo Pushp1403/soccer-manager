@@ -65,9 +65,9 @@ class InvalidTransferException(ApplicationException):
     Thrown if user tries to transfer a player already on team
     """
 
-    def __init__(self, payload=None):
-        super().__init__(message="Invalid transfer request. Requested player already on team",
-                         status_code=400,
+    def __init__(self, message=None, payload=None, status_code=None):
+        super().__init__(message=message,
+                         status_code=status_code,
                          payload=payload,
                          name="InvalidTransferException")
 

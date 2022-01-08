@@ -39,7 +39,9 @@ class Transfer(Resource):
         transfer = transfer_service.get_transfer_by_transfer_id(transfer_id)
 
         if transfer.transferred_from == user.team.team_id:
-            raise InvalidTransferException(payload={"transfer_id": transfer_id})
+            raise InvalidTransferException(message="Invalid transfer request. Player already on the team",
+                                           payload={"transfer_id": transfer_id},
+                                           status_code=400)
 
         if user.team.available_cash < transfer.ask_price:
             raise InsufficientFundsException(payload={})
